@@ -117,7 +117,7 @@ exit: Exit this chat app
                 if chunk.text.endswith("."):
                     response_text += chunk.text
                 else:
-                    response_text += re.sub(r'\s*$', '.', chunk.text)
+                    response_text += re.sub(r'\s*$', '', chunk.text)
 
             console = Console()
             md = Markdown(response_text)
