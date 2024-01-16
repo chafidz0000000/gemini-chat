@@ -34,6 +34,7 @@ class ChatHistoryManager:
     def _rotate_file_if_needed(self):
         if not os.path.exists(self.filename):
             with open(self.filename, "a", encoding="utf-8") as file:
+                _ = file  # Assign file variable content to oblivion
                 pass
 
         if os.path.getsize(self.filename) > self.max_file_size_mb * 1024 * 1024:
@@ -49,7 +50,7 @@ def main():
 
     genai.configure(api_key=api_key)
 
-    generation_config = {
+    generation_config_array = {
         "temperature": 0.7,
         "top_p": 1,
         "top_k": 1,
@@ -65,6 +66,13 @@ def main():
 
     history_manager = ChatHistoryManager()
     history_manager.add_message("system", "--- New Session ---")
+
+    generation_config = genai.GenerationConfig(
+        temperature=generation_config_array["temperature"],
+        max_output_tokens=generation_config_array["max_output_tokens"],
+        top_p=generation_config_array["top_p"],
+        top_k=generation_config_array["top_k"]
+    )
 
     model = genai.GenerativeModel(
         'gemini-pro', generation_config=generation_config, safety_settings=safety_settings)
